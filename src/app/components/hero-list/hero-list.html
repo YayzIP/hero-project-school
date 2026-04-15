@@ -1,7 +1,7 @@
 <h1>Mission Control Center</h1>
 <div class="container flex flex-col gap-4">
     @for (h of heroes; track h.id) {
-    <app-hero-card-component [hero]="h" (missionComplete)="onMissionComplete($event)"></app-hero-card-component>
+    <app-hero-card [hero]="h" (missionComplete)="onMissionComplete($event)"></app-hero-card>
     } @empty {
     <p>No heroes available.</p>
     }

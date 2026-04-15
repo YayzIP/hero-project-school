@@ -3,10 +3,10 @@ import { HeroModel } from '../../Models/hero.model';
 import { CommonModule } from '@angular/common';
 
 @Component({
-  selector: 'app-hero-card-component',
+  selector: 'app-hero-card',
   imports: [CommonModule],
-  templateUrl: './hero-card-component.html',
-  styleUrl: './hero-card-component.css',
+  templateUrl: './hero-card.html',
+  styleUrl: './hero-card.css',
 })
 export class HeroCardComponent {
   @Input() hero!: HeroModel;
