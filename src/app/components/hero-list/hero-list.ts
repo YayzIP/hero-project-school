@@ -1,19 +1,20 @@
 import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { HeroCardComponent } from "../hero-card/hero-card";
 import { HeroModel } from '../../Models/hero.model';
 
 @Component({
   selector: 'app-hero-list',
+  standalone: true,
   imports: [CommonModule, HeroCardComponent],
   templateUrl: './hero-list.html',
-  styleUrl: './hero-list.css',
+  styleUrls: ['./hero-list.css'],
 })
 export class HeroListComponent {
-  heroes: HeroModel[] = [
-    { id: 1, name: 'Superman', superPower: 'Flight', missionCompleted: false },
-    { id: 2, name: 'Batman', superPower: 'Intellect', missionCompleted: false },
-    { id: 3, name: 'Wonder Woman', superPower: 'Lasso of Truth', missionCompleted: false }
+  /* Input o dummy data */
+  @Input() heroes: HeroModel[] = [
+    { id: 1, name: 'Dummy 1', superPower: 'Eating', missionCompleted: false },
+    { id: 2, name: 'Dummy 2', superPower: 'Drinking', missionCompleted: false },
   ];
   totalCompleted: number = 0;
 

@@ -4,9 +4,10 @@ import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-hero-card',
+  standalone: true,
   imports: [CommonModule],
   templateUrl: './hero-card.html',
-  styleUrl: './hero-card.css',
+  styleUrls: ['./hero-card.css'],
 })
 export class HeroCardComponent {
   @Input() hero!: HeroModel;
