@@ -7,6 +7,9 @@ A school assignment. This project was generated using [Angular CLI](https://gith
 To start a local development server, run:
 
 ```bash
+git clone https://github.com/YayzIP/hero-project-school
+cd hero-project-school
+npm install
 ng serve
 ```
 
