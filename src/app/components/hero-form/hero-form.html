@@ -1,8 +1,8 @@
-<input type="text" placeholder="Hero ID" class="block border rounded-lg shadow-md mt-2">
-<input type="text" placeholder="Hero Name" class="block border rounded-lg shadow-md mt-2">
-<input type="text" placeholder="Super Power" class="block border rounded-lg shadow-md mt-2">
+<input type="text" [(ngModel)]="hero.id" class="block border rounded-lg shadow-md mt-2" disabled="true">
+<input type="text" [(ngModel)]="hero.name" class="block border rounded-lg shadow-md mt-2">
+<input type="text" [(ngModel)]="hero.superPower" class="block border rounded-lg shadow-md mt-2">
 
-<button
-    class="bg-blue-500 hover:bg-blue-700 disabled:bg-gray-400 disabled:cursor-not-allowed text-white font-bold py-1 px-2 rounded mt-3">
-    Confirm
+<button (click)="notifyParent()" class="bg-blue-500 hover:bg-blue-700 disabled:bg-gray-400 disabled:cursor-not-allowed text-white font-bold py-1
+    px-2 rounded mt-3">
+    Submit !
 </button>

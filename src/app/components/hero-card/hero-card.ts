@@ -12,8 +12,13 @@ import { CommonModule } from '@angular/common';
 export class HeroCardComponent {
   @Input() hero!: HeroModel;
   @Output() missionComplete: EventEmitter<number> = new EventEmitter<number>();
+  @Output() heroSelected: EventEmitter<number> = new EventEmitter<number>();
 
-  notifyParent() {
+  completeMission() {
     this.missionComplete.emit(this.hero.id);
+  }
+
+  selectHero() {
+    this.heroSelected.emit(this.hero.id);
   }
 }
