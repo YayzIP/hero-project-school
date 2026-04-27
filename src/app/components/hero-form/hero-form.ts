@@ -13,6 +13,7 @@ import { HeroService } from '../../services/hero-service';
 export class HeroForm {
   heroService = inject(HeroService);
   hero: Signal<HeroModel> = computed(() => this.heroService.selectedHero());
+  message: Signal<string> = computed(() => this.hero().id === -1 ? 'Add New Hero' : 'Edit Hero');
 
   submitHero() {
     const existingIndex = this.heroService.heroes().findIndex(h => h.id === this.hero().id);

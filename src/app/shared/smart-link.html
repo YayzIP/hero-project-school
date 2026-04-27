@@ -1,0 +1,11 @@
+<ng-container [@if]="isInternal">
+    <a [routerLink]="href" [ngClass]="linkClass" [attr.target]="target" [attr.rel]="rel">
+        <ng-content></ng-content>
+    </a>
+</ng-container>
+
+<ng-template @else>
+    <a [href]="href" [ngClass]="linkClass" [attr.target]="target" [attr.rel]="rel">
+        <ng-content></ng-content>
+    </a>
+</ng-template>
