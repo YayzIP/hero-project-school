@@ -16,12 +16,15 @@ export class HeroCardComponent {
   constructor(private heroService: HeroService) { }
 
   completeMission() {
-    this.heroService.heroes.update(heroes =>
-      heroes.map(h => h.id === this.hero.id ? { ...h, missionCompleted: true } : h)
-    );
+    const updatedHero: HeroModel = { ...this.hero, missionCompleted: true };
+    this.heroService.modifyHero(updatedHero).subscribe({
+      error: (err) => {
+        console.error('Mission complete failed', err);
+      }
+    });
   }
 
   selectHero() {
-    this.heroService.selectHeroById(this.hero.id);
+    this.heroService.selectHeroById(this.hero._id);
   }
 }
