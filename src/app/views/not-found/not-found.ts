@@ -1,10 +1,10 @@
 import { Component } from '@angular/core';
-import { SmartLinkComponent } from '../../shared/smart-link';
+import { RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-not-found',
   standalone: true,
-  imports: [SmartLinkComponent],
+  imports: [RouterLink],
   templateUrl: './not-found.html',
   styleUrls: ['./not-found.css'],
 })
