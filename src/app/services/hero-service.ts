@@ -1,27 +1,44 @@
-import { Injectable, signal } from '@angular/core';
+import { Injectable, signal, effect, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { tap } from 'rxjs/operators';
+import { tap, catchError } from 'rxjs/operators';
+import { throwError } from 'rxjs';
 import { HeroModel } from '../Models/hero.model';
 
 @Injectable({
   providedIn: 'root',
 })
 export class HeroService {
-  apiUrl = 'https://crudcrud.com/api/a268e90d0fcc4844bd98827a615a6338/heroes';
+  private http = inject(HttpClient);
+  apiUrl = 'https://crudcrud.com/api/2dbecb5544f044439023c58e7ef1299e/heroes';
 
   heroes = signal<HeroModel[]>([]);
-  selectedHero = signal<HeroModel>({ _id: -1, name: 'hero name', superPower: 'super power', missionCompleted: false });
+  selectedHero = signal<HeroModel>({ _id: '', name: 'hero name', superPower: 'super power', missionCompleted: false });
+  isLoading = signal(false);
+  error = signal<string | null>(null);
 
-  constructor(private http: HttpClient) { }
+  constructor() {
+    effect(() => {
+      this.loadHeroes().subscribe();
+    });
+  }
 
   loadHeroes(): Observable<HeroModel[]> {
+    this.isLoading.set(true);
+    this.error.set(null);
+
     return this.http.get<HeroModel[]>(this.apiUrl).pipe(
-      tap((heroes) => this.heroes.set(heroes))
+      tap((heroes) => this.heroes.set(heroes)),
+      tap(() => this.isLoading.set(false)),
+      catchError((err) => {
+        this.error.set(err.message || 'Failed to load heroes');
+        this.isLoading.set(false);
+        return throwError(() => err);
+      })
     );
   }
 
-  selectHeroById(heroId: number) {
+  selectHeroById(heroId: string) {
     const hero = this.heroes().find((h) => h._id === heroId);
     if (hero) {
       this.selectedHero.set(hero);
@@ -29,18 +46,18 @@ export class HeroService {
   }
 
   addHero(hero: HeroModel): Observable<HeroModel> {
-    const nextId = this.heroes().length > 0 ? Math.max(...this.heroes().map((h) => h._id)) + 1 : 0;
-    const heroToCreate: HeroModel = { ...hero, _id: nextId };
+    const { _id, ...heroToCreate } = hero;
 
     return this.http.post<HeroModel>(this.apiUrl, heroToCreate).pipe(
       tap((createdHero) => this.heroes.update((heroes) => [...heroes, createdHero]))
     );
   }
 
-  modifyHero(updatedHero: HeroModel): Observable<HeroModel> {
-    return this.http.put<HeroModel>(`${this.apiUrl}/${updatedHero._id}`, updatedHero).pipe(
-      tap((hero) =>
-        this.heroes.update((heroes) => heroes.map((item) => (item._id === hero._id ? hero : item)))
+  modifyHero(hero: HeroModel): Observable<HeroModel> {
+    const { _id, ...updatedHero } = hero;
+    return this.http.put<HeroModel>(`${this.apiUrl}/${_id}`, updatedHero).pipe(
+      tap((updatedHero) =>
+        this.heroes.update((heroes) => heroes.map((item) => (item._id === hero._id ? updatedHero : item)))
       )
     );
   }

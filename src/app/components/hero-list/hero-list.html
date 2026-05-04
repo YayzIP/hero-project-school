@@ -1,6 +1,6 @@
 <h1>Mission Control Center</h1>
 <div class="container flex flex-col gap-4">
-    @for (h of heroes(); track h.id) {
+    @for (h of heroes(); track h._id) {
     <app-hero-card [hero]="h"></app-hero-card>
     } @empty {
     <p>No heroes available.</p>

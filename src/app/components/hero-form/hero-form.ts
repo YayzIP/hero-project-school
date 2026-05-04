@@ -1,4 +1,4 @@
-import { Component, computed, EventEmitter, inject, Input, Output, Signal } from '@angular/core';
+import { Component, computed, inject, Signal, signal } from '@angular/core';
 import { HeroModel } from '../../Models/hero.model';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
@@ -12,11 +12,20 @@ import { HeroService } from '../../services/hero-service';
 })
 export class HeroForm {
   heroService = inject(HeroService);
-  hero: Signal<HeroModel> = computed(() => this.heroService.selectedHero());
-  message: Signal<string> = computed(() => this.hero()._id === -1 ? 'Add New Hero' : 'Edit Hero');
+  formHero = signal<HeroModel>({ _id: '', name: 'hero name', superPower: 'super power', missionCompleted: false });
+  message: Signal<string> = computed(() => this.formHero()._id === '' ? 'Add New Hero' : 'Edit Hero');
+
+  constructor() {
+    this.formHero.set(this.heroService.selectedHero());
+  }
+
+  ngOnInit() {
+    // Update form when selected hero changes
+    this.formHero.set(this.heroService.selectedHero());
+  }
 
   submitHero() {
-    const hero = this.hero();
+    const hero = this.formHero();
     const existingIndex = this.heroService.heroes().findIndex(h => h._id === hero._id);
 
     const request = existingIndex !== -1
@@ -26,7 +35,13 @@ export class HeroForm {
     request.subscribe({
       next: () => {
         this.heroService.selectedHero.set({
-          _id: -1,
+          _id: '',
+          name: 'hero name',
+          superPower: 'super power',
+          missionCompleted: false,
+        });
+        this.formHero.set({
+          _id: '',
           name: 'hero name',
           superPower: 'super power',
           missionCompleted: false,

@@ -1,5 +1,5 @@
 export interface HeroModel {
-    _id: number;
+    _id: string;
     name: string;
     superPower: string;
     missionCompleted: boolean;
