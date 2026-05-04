@@ -10,7 +10,7 @@ import { HeroModel } from '../Models/hero.model';
 })
 export class HeroService {
   private http = inject(HttpClient);
-  apiUrl = 'https://crudcrud.com/api/2dbecb5544f044439023c58e7ef1299e/heroes';
+  apiUrl = 'https://crudcrud.com/api/5527b5133ff94e089562c71261e07102/heroes';
 
   heroes = signal<HeroModel[]>([]);
   selectedHero = signal<HeroModel>({ _id: '', name: 'hero name', superPower: 'super power', missionCompleted: false });
@@ -54,10 +54,14 @@ export class HeroService {
   }
 
   modifyHero(hero: HeroModel): Observable<HeroModel> {
-    const { _id, ...updatedHero } = hero;
-    return this.http.put<HeroModel>(`${this.apiUrl}/${_id}`, updatedHero).pipe(
-      tap((updatedHero) =>
-        this.heroes.update((heroes) => heroes.map((item) => (item._id === hero._id ? updatedHero : item)))
+    const { _id, ...heroWithoutId } = hero;
+    return this.http.put<HeroModel>(`${this.apiUrl}/${_id}`, heroWithoutId).pipe(
+      tap((responseHero) =>
+        this.heroes.update((heroes) =>
+          heroes.map((item) =>
+            item._id === _id ? { ...item, ...responseHero, _id } : item
+          )
+        )
       )
     );
   }

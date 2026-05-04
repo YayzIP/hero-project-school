@@ -1,4 +1,4 @@
-import { Component, computed, inject, Signal, signal } from '@angular/core';
+import { Component, computed, inject, Signal, signal, effect } from '@angular/core';
 import { HeroModel } from '../../Models/hero.model';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
@@ -16,12 +16,10 @@ export class HeroForm {
   message: Signal<string> = computed(() => this.formHero()._id === '' ? 'Add New Hero' : 'Edit Hero');
 
   constructor() {
-    this.formHero.set(this.heroService.selectedHero());
-  }
-
-  ngOnInit() {
-    // Update form when selected hero changes
-    this.formHero.set(this.heroService.selectedHero());
+    // Reactively update formHero whenever selectedHero changes
+    effect(() => {
+      this.formHero.set(this.heroService.selectedHero());
+    });
   }
 
   submitHero() {
